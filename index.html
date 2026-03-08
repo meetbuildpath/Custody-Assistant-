@@ -487,8 +487,6 @@
 </head>
 <body>
 
-<div class="loading-bar" id="loadingBar"></div>
-
 <header>
   <div>
     <div class="case-title">Jones v. Cooney</div>
@@ -499,7 +497,6 @@
 
 <div class="tab-bar">
   <button class="tab-btn active" onclick="switchTab('calendar')">📅 Calendar</button>
-  <button class="tab-btn" onclick="switchTab('chat')">💬 AI Assistant</button>
   <button class="tab-btn" onclick="switchTab('orders')">📋 Orders & Terms</button>
   <button class="tab-btn" onclick="switchTab('timeline')">🗓 Timeline</button>
 </div>
@@ -524,34 +521,6 @@
     </div>
   </div>
 
-  <!-- CHAT TAB -->
-  <div class="tab-content" id="tab-chat">
-    <div class="quick-prompts">
-      <button class="qp-btn" onclick="sendQuick('Whose weekend is this?')">Whose weekend is this?</button>
-      <button class="qp-btn" onclick="sendQuick('What does the summer schedule look like?')">Summer schedule</button>
-      <button class="qp-btn" onclick="sendQuick('What are the holiday visitation rules?')">Holiday rules</button>
-      <button class="qp-btn" onclick="sendQuick('Explain the alternate weekend rule')">Alternate weekend rule</button>
-      <button class="qp-btn" onclick="sendQuick('What is the Right of First Refusal?')">Right of First Refusal</button>
-      <button class="qp-btn" onclick="sendQuick('Who has the child for Mother\'s Day 2026?')">Mother's Day 2026</button>
-      <button class="qp-btn" onclick="sendQuick('What did both parties agree on March 8, 2026?')">Mar 8 Agreement</button>
-      <button class="qp-btn" onclick="sendQuick('What is the child support amount?')">Child support amount</button>
-    </div>
-    <div class="chat-messages" id="chatMessages">
-      <div class="msg assistant">
-        <div class="msg-avatar">JvC</div>
-        <div class="msg-bubble">
-          <p>Hello. I'm your Jones v. Cooney case assistant. I have full knowledge of your custody orders, the 2026 visitation calendar, and the recent agreements from March 8, 2026.</p>
-          <p>Ask me anything about the schedule, visitation terms, holidays, or case history.</p>
-        </div>
-      </div>
-    </div>
-    <div class="chat-input-row">
-      <textarea class="chat-input" id="chatInput" placeholder="Ask about the schedule, orders, or any case detail…" rows="1"
-        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage()}"
-        oninput="autoResize(this)"></textarea>
-      <button class="chat-send" id="sendBtn" onclick="sendMessage()">Send →</button>
-    </div>
-  </div>
 
   <!-- ORDERS TAB -->
   <div class="tab-content" id="tab-orders">
@@ -588,12 +557,11 @@
     </div>
 
     <div class="order-card">
-      <h3>Agreements — March 8, 2026 (via text)</h3>
+      <h3>Agreements</h3>
       <div class="order-meta">BOTH PARTIES AGREED</div>
       <div class="order-body">
         <ul>
-          <li><strong>Mother's Day / Father's Day:</strong> Both parties agreed these holidays apply to the <em>entire weekend</em>, not just the single day.</li>
-          <li><strong>Summer visitation:</strong> Every other weekend during summer is ALWAYS Jason's (not tied to the odd/even Friday rule). Current weekend of Mar 8–9, 2026 is Jason's. Pattern alternates from there through summer.</li>
+          <li><strong>Summer visitation weekends:</strong> Every other weekend during summer belongs to the non-custodial parent — alternating weekends, not tied to odd/even Friday dates. Current weekend of Mar 8–9, 2026 is the non-custodial parent's. Pattern alternates from there through summer.</li>
         </ul>
       </div>
     </div>
@@ -722,8 +690,8 @@
           <div class="tl-date">Mar 8, 2026</div>
           <div class="tl-dot" style="background:var(--accent)"></div>
           <div class="tl-content">
-            <div class="tl-title">Text Agreements — Mother's Day/Father's Day & Summer Weekend Pattern</div>
-            <div class="tl-desc">Both parties agreed via text: (1) Mother's Day and Father's Day apply to the entire weekend. (2) Summer visitation weekends are every other weekend always (not tied to odd/even Friday rule); current weekend Mar 8–9 is Jason's.</div>
+            <div class="tl-title">Text Agreement — Summer Weekend Pattern</div>
+            <div class="tl-desc">Both parties agreed via text: Summer visitation is alternating weekends for the non-custodial parent — not tied to odd/even Friday dates. Current weekend Mar 8–9 is the non-custodial parent's; pattern alternates from there through summer.</div>
           </div>
         </div>
       </div>
@@ -984,186 +952,11 @@ function changeMonth(dir) {
 }
 
 // ============================================================
-// AI CHAT
-// ============================================================
-const SYSTEM_PROMPT = `You are a precise legal case assistant for Jones v. Cooney, CV 181 No. 18, Laramie County District Court, Wyoming.
-
-PARTIES:
-- Petitioner/Mother: Tara Gladys Jones (now Tara Jones-Alley), DOB March 1, 1981
-- Respondent/Father: Jason Kyle Cooney, DOB April 20, 1983
-- Minor Child: L.J.C. (Layla Jones Cooney), born June 28, 2011, Wyoming
-
-TODAY: March 8, 2026 (Sunday)
-
-CURRENT GOVERNING ORDERS (most recent first):
-1. STIPULATED ORDER MODIFYING CHILD CUSTODY AND VISITATION (Dec 27, 2024, Judge Sharpe)
-   - Joint legal custody; Tara has primary physical custody
-   - SCHOOL YEAR schedule (alternating weeks):
-     * Week 1: Jason has child Friday 4:30pm → Monday morning (school dropoff, or return to Tara by 4:30pm if no school)
-     * Week 2: Jason has child Thursday 4:30pm → Friday morning (school dropoff, or return to Tara by 4:30pm if no school)
-   - Summer & Holidays: Per Amended Standard Visitation Order (Nov 12, 2013)
-   - Communication: Our Family Wizard app ONLY
-   - Right of First Refusal: 2+ hour threshold
-
-2. AMENDED STANDARD VISITATION ORDER (Nov 12, 2013)
-   - ALTERNATE WEEKENDS: Non-custodial parent (Jason) has weekends where Friday is an EVEN-numbered date, starting 6pm Friday → 6pm Sunday. If holiday Monday, through 6pm Monday.
-   - Custodial parent (Tara) has weekends where Friday is ODD-numbered date.
-   - SUMMER VISITATION: Jason (non-custodial) has minimum 2 months, starting first Saturday after school ends, ending 7pm on day 60. Tara has alternate holiday and alternate weekend schedule during summer. Tara may take 1 uninterrupted week in July with 25-day advance written notice to Jason.
-   - SUMMER TRANSPORTATION: Split equally; non-custodial pays to bring child, custodial pays to return.
-
-3. SUPPLEMENTAL ORDER (Nov 12, 2013): General conduct, no disparagement, no substances, Right of First Refusal.
-
-4. CHILD SUPPORT: Jason pays Tara $220.16/month via District Court clerk. Abates during Jason's summer visitation upon filing claim.
-
-5. MEDICAL INSURANCE: Tara provides (Blue Cross Blue Shield). Uncovered costs 50/50 within 30 days.
-
-AGREEMENTS VIA TEXT - MARCH 8, 2026 (BOTH PARTIES AGREED):
-- Mother's Day and Father's Day: Both holidays apply to the ENTIRE WEEKEND, not just the single day.
-- Summer visitation weekends: Every other weekend during summer is ALWAYS Jason's (not tied to the odd/even Friday rule). Current weekend of March 8-9, 2026 is JASON's. The pattern alternates from there through summer.
-
-HOLIDAY SCHEDULE (from Amended SVO):
-- ODD YEARS (Jason has): First half Christmas vacation (school start → noon Christmas Day), Easter/Spring Break (even years Tara), 4th of July (odd years), Child's birthday
-- EVEN YEARS (Tara has): Second half Christmas vacation (Christmas Day noon → end of school vacation), New Year's Day, Spring Break (odd years Tara), Thanksgiving (school end Friday → Sunday after)
-- Mother always has Mother's Day; Father always has Father's Day — BOTH now apply to entire weekend per March 8, 2026 agreement
-- Labor Day: 4th of July schedule (same as 4th of July with appropriate date changes)
-- Memorial Day: Same as 4th of July with appropriate date changes
-- Child's Birthday: 7am to 7pm
-- When holiday falls on Monday following alternate weekend, non-custodial parent gets 3 weekends in a row
-
-2026 CALENDAR KEY FACTS:
-- School year runs through approximately June 3, 2026 (Last Day)
-- Summer begins approximately June 6, 2026
-- School resumes approximately August 24, 2026
-- Summer period = June 6 to August 4 = Jason's summer custody (60 days)
-- Mother's Day 2026: May 10 (entire weekend = May 9-10)
-- Father's Day 2026: June 21 (entire weekend = June 20-21)
-- Child's birthday: June 28, 2026
-
-CASE HISTORY:
-- Married May 15, 2012; separated Feb 21, 2013
-- Divorce complaint filed April 22, 2013
-- Decree of Divorce: November 11, 2013, Judge Steven K. Sharpe
-- Jason's attorney (Jared Crecelius, Olsen Legal Group) withdrew January 31, 2025; Jason is now pro se
-- Tara is represented by Woodhouse Roden Ames & Brennan, LLC (Katye Ames)
-
-Be concise, accurate, and cite the specific order when relevant. If you're uncertain, say so. Today is March 8, 2026.`;
-
-async function sendMessage() {
-  const input = document.getElementById('chatInput');
-  const text = input.value.trim();
-  if (!text) return;
-
-  addMessage('user', text);
-  input.value = '';
-  input.style.height = 'auto';
-
-  const sendBtn = document.getElementById('sendBtn');
-  sendBtn.disabled = true;
-
-  const typingEl = addTyping();
-  setLoading(true);
-
-  try {
-    // Build conversation history
-    const msgs = document.querySelectorAll('.msg:not(.typing-msg)');
-    const history = [];
-    msgs.forEach(m => {
-      if (m.classList.contains('user')) {
-        history.push({role:'user', content: m.querySelector('.msg-bubble').innerText});
-      } else if (m.classList.contains('assistant') && history.length > 0) {
-        history.push({role:'assistant', content: m.querySelector('.msg-bubble').innerText});
-      }
-    });
-    // Add current user message
-    history.push({role:'user', content: text});
-
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: SYSTEM_PROMPT,
-        messages: history
-      })
-    });
-
-    const data = await response.json();
-    typingEl.remove();
-
-    const replyText = data.content?.[0]?.text || 'Sorry, I couldn\'t get a response.';
-    addMessage('assistant', replyText);
-  } catch (err) {
-    typingEl.remove();
-    addMessage('assistant', 'Connection error. Please try again.');
-  }
-
-  sendBtn.disabled = false;
-  setLoading(false);
-}
-
-function sendQuick(text) {
-  document.getElementById('chatInput').value = text;
-  switchTab('chat');
-  sendMessage();
-}
-
-function addMessage(role, text) {
-  const container = document.getElementById('chatMessages');
-  const div = document.createElement('div');
-  div.className = `msg ${role}`;
-
-  // Format text with basic markdown
-  const formatted = text
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.*?)\*/g, '<em>$1</em>')
-    .split('\n').map(line => {
-      if (line.startsWith('- ') || line.startsWith('• ')) return `<li>${line.slice(2)}</li>`;
-      return line ? `<p>${line}</p>` : '';
-    }).join('');
-
-  // Wrap list items
-  const html = formatted.replace(/(<li>.*?<\/li>)+/gs, m => `<ul>${m}</ul>`);
-
-  div.innerHTML = `
-    <div class="msg-avatar">${role === 'user' ? 'YOU' : 'JvC'}</div>
-    <div class="msg-bubble">${html}</div>
-  `;
-  container.appendChild(div);
-  container.scrollTop = container.scrollHeight;
-  return div;
-}
-
-function addTyping() {
-  const container = document.getElementById('chatMessages');
-  const div = document.createElement('div');
-  div.className = 'msg assistant typing-msg';
-  div.innerHTML = `
-    <div class="msg-avatar">JvC</div>
-    <div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>
-  `;
-  container.appendChild(div);
-  container.scrollTop = container.scrollHeight;
-  return div;
-}
-
-function setLoading(on) {
-  const bar = document.getElementById('loadingBar');
-  bar.style.width = on ? '70%' : '100%';
-  if (!on) setTimeout(() => { bar.style.width = '0'; }, 300);
-}
-
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 160) + 'px';
-}
-
-// ============================================================
 // TABS
 // ============================================================
 function switchTab(name) {
   document.querySelectorAll('.tab-btn').forEach((b,i) => {
-    const names = ['calendar','chat','orders','timeline'];
+    const names = ['calendar','orders','timeline'];
     b.classList.toggle('active', names[i] === name);
   });
   document.querySelectorAll('.tab-content').forEach(el => {
